@@ -1,9 +1,8 @@
-package ru.yandex.practicum.com.example.filmorate.controller;
+package ru.yandex.practicum.filmorate.controller;
 
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.com.example.filmorate.manager.UserManager;
-import ru.yandex.practicum.com.example.filmorate.model.Film;
-import ru.yandex.practicum.com.example.filmorate.model.User;
+import ru.yandex.practicum.filmorate.manager.UserManager;
+import ru.yandex.practicum.filmorate.model.User;
 
 
 import java.util.List;

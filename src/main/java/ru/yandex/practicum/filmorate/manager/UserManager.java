@@ -1,10 +1,11 @@
-package ru.yandex.practicum.com.example.filmorate.manager;
+package ru.yandex.practicum.filmorate.manager;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import ru.yandex.practicum.com.example.filmorate.exception.ValidationException;
-import ru.yandex.practicum.com.example.filmorate.model.Film;
-import ru.yandex.practicum.com.example.filmorate.model.User;
+
+
+import ru.yandex.practicum.filmorate.exception.ValidationException;
+import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

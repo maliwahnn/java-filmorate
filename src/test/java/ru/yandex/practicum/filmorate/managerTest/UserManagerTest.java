@@ -1,11 +1,9 @@
-package ru.yandex.practicum.com.example.filmorate.managerTest;
+package ru.yandex.practicum.filmorate.managerTest;
 
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
-import ru.yandex.practicum.com.example.filmorate.manager.FilmManager;
-import ru.yandex.practicum.com.example.filmorate.manager.UserManager;
-import ru.yandex.practicum.com.example.filmorate.model.Film;
-import ru.yandex.practicum.com.example.filmorate.model.User;
+import ru.yandex.practicum.filmorate.manager.UserManager;
+import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

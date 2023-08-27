@@ -1,7 +1,6 @@
-package ru.yandex.practicum.com.example.filmorate.model;
+package ru.yandex.practicum.filmorate.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;

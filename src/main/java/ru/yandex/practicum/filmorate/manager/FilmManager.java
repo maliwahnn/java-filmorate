@@ -1,19 +1,22 @@
-package ru.yandex.practicum.com.example.filmorate.manager;
+package ru.yandex.practicum.filmorate.manager;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import ru.yandex.practicum.com.example.filmorate.exception.ValidationException;
-import ru.yandex.practicum.com.example.filmorate.model.Film;
+
+
+import ru.yandex.practicum.filmorate.exception.ValidationException;
+import ru.yandex.practicum.filmorate.model.Film;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+
 @Slf4j
 @Data
 public class FilmManager {
-    private HashMap<Integer,Film> allFilms = new HashMap<>();
+    private HashMap<Integer, Film> allFilms = new HashMap<>();
     private int filmId;
 
     public Film addFilm(Film film) {
