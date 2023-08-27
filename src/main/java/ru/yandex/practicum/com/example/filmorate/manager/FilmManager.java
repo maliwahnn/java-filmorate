@@ -1,5 +1,6 @@
 package ru.yandex.practicum.com.example.filmorate.manager;
 
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import ru.yandex.practicum.com.example.filmorate.exception.ValidationException;
 import ru.yandex.practicum.com.example.filmorate.model.Film;
@@ -10,12 +11,12 @@ import java.util.HashMap;
 import java.util.List;
 
 @Slf4j
+@Data
 public class FilmManager {
     private HashMap<Integer,Film> allFilms = new HashMap<>();
     private int filmId;
 
     public Film addFilm(Film film) {
-
         descriptionValidation(film.getDescription());
         dateValidation(film.getReleaseDate());
         timeValidation(film.getDuration());
@@ -62,4 +63,6 @@ public class FilmManager {
             throw new ValidationException("Неверная длительность фильма");
         }
     }
+
+
 }

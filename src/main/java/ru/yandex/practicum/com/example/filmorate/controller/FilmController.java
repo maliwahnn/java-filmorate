@@ -22,7 +22,7 @@ public class FilmController {
         return filmManager.updateFilm(film);
     }
     @PostMapping
-    public Film add (@RequestBody Film film) {
+    public Film add(@RequestBody Film film) {
         return filmManager.addFilm(film);
     }
 
