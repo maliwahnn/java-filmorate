@@ -29,6 +29,7 @@ public class FilmManager {
         log.info("Фильм создан", film.getName(), film.getId());
         return film;
     }
+
     public int createId() {
         return ++filmId;
     }
@@ -38,7 +39,7 @@ public class FilmManager {
         dateValidation(film.getReleaseDate());
         timeValidation(film.getDuration());
         nameValidation(film.getName());
-        allFilms.put(film.getId(),film);
+        allFilms.put(film.getId(), film);
         return film;
     }
 
@@ -46,22 +47,26 @@ public class FilmManager {
         List<Film> list = new ArrayList<>(allFilms.values());
         return list;
     }
+
     private void nameValidation(String name) throws ValidationException {
-        if (name == null || name.isBlank())  {
+        if (name == null || name.isBlank()) {
             throw new ValidationException("Поле name не должно быть пустым");
         }
     }
-    private void descriptionValidation(String description) throws ValidationException  {
+
+    private void descriptionValidation(String description) throws ValidationException {
         if (description.length() > 200 || description.length() == 0) {
             throw new ValidationException("Максимальная длина должна быть не больше 200 символов");
         }
     }
-    private void dateValidation (LocalDate date) throws ValidationException {
-        if (date == null || date.isBefore(LocalDate.of(1895,12,28))) {
+
+    private void dateValidation(LocalDate date) throws ValidationException {
+        if (date == null || date.isBefore(LocalDate.of(1895, 12, 28))) {
             throw new ValidationException("Некорректная дата");
         }
     }
-    private void timeValidation (double time) throws ValidationException {
+
+    private void timeValidation(double time) throws ValidationException {
         if (time <= 0) {
             throw new ValidationException("Неверная длительность фильма");
         }
