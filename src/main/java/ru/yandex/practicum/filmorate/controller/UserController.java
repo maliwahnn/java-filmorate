@@ -16,10 +16,12 @@ public class UserController {
     public List<User> getFilm() {
         return userManager.getUserList();
     }
+
     @PutMapping
     public User update(@RequestBody User user) {
         return userManager.updateUser(user);
     }
+
     @PostMapping
     public User add(@RequestBody User user) {
         return userManager.addUser(user);
