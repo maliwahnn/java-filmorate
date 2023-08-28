@@ -8,7 +8,7 @@ import ru.yandex.practicum.filmorate.model.User;
 import java.util.List;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/user")
 public class UserController {
     UserManager userManager = new UserManager();
 
