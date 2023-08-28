@@ -11,8 +11,8 @@ import java.util.List;
 
 public class UserManagerTest {
     UserManager manager = new UserManager();
-    private final User user = new User(1, "di@mail.ru", "balda", "aa",   LocalDate.of(1995, 1, 1));
-    private final User  updatedUser = new User(1, "xi@mail.ru", "nefritoviy", "sterzen",   LocalDate.of(2000, 1, 1));
+    private final User user = new User(1, "di@mail.ru", "balda", "aa", LocalDate.of(1995, 1, 1));
+    private final User updatedUser = new User(1, "xi@mail.ru", "nefritoviy", "sterzen", LocalDate.of(2000, 1, 1));
 
     @Test
     public void addUserTest() {
@@ -20,6 +20,7 @@ public class UserManagerTest {
 
         Assertions.assertEquals(1, manager.getAllUsers().size());
     }
+
     @Test
     public void updateFilmTest() {
         manager.addUser(user);
@@ -29,6 +30,7 @@ public class UserManagerTest {
         Assertions.assertEquals(user.getId(), updatedUser.getId());
         Assertions.assertEquals(1, manager.getAllUsers().size());
     }
+
     @Test
     public void testGetFilmsList() {
         manager.addUser(user);

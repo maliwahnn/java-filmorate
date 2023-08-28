@@ -21,11 +21,12 @@ public class FilmManagerTest {
             LocalDate.of(2000, 3, 1), 180);
 
     @Test
-   public void addFilmTest() {
+    public void addFilmTest() {
         manager.addFilm(film);
 
         Assertions.assertEquals(1, manager.getAllFilms().size());
     }
+
     @Test
     public void updateFilmTest() {
         manager.addFilm(film);
@@ -34,6 +35,7 @@ public class FilmManagerTest {
         Assertions.assertEquals("Drill этого фильма", updatedFilm.getDescription());
         Assertions.assertEquals(2, manager.getAllFilms().size());
     }
+
     @Test
     public void testGetFilmsList() {
         manager.addFilm(film);
