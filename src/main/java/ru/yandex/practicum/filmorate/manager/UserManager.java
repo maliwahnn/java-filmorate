@@ -20,19 +20,18 @@ public class UserManager {
 
 
     public User addUser(User user) {
-
         loginValidation(user.getLogin());
         emailValidation(user.getEmail());
         nameValidation(user.getName(), user.getLogin());
         birthdayValidation(user);
-        createId();
+        createId(user);
         allUsers.put(userId, user);
         log.info("Пользователь создан", user.getName(), user.getId());
         return user;
     }
 
-    public int createId() {
-        return userId++;
+    public void createId(User user) {
+        user.setId(++userId);
     }
 
     public User updateUser(User user) {

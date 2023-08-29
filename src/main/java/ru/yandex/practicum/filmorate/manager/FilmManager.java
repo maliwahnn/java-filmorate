@@ -24,14 +24,14 @@ public class FilmManager {
         dateValidation(film.getReleaseDate());
         timeValidation(film.getDuration());
         nameValidation(film.getName());
-        createId();
+        createId(film);
         allFilms.put(filmId, film);
         log.info("Фильм создан", film.getName(), film.getId());
         return film;
     }
 
-    public int createId() {
-        return filmId++;
+    public void createId(Film film) {
+        film.setId(++filmId);
     }
 
     public Film updateFilm(Film film) {
