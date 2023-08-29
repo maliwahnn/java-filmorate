@@ -31,7 +31,7 @@ public class FilmManager {
     }
 
     public int createId() {
-        return ++filmId;
+        return filmId++;
     }
 
     public Film updateFilm(Film film) {

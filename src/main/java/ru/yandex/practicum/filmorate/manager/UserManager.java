@@ -31,7 +31,7 @@ public class UserManager {
     }
 
     public int createId() {
-        return ++userId;
+        return userId++;
     }
 
     public User updateUser(User user) {
