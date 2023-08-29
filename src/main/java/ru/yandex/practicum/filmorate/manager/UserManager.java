@@ -20,6 +20,7 @@ public class UserManager {
 
 
     public User addUser(User user) {
+
         loginValidation(user.getLogin());
         emailValidation(user.getEmail());
         nameValidation(user.getName(), user.getLogin());

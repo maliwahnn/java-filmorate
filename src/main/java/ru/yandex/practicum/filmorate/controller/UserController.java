@@ -13,7 +13,7 @@ public class UserController {
     UserManager userManager = new UserManager();
 
     @GetMapping
-    public List<User> getFilm() {
+    public List<User> getUser() {
         return userManager.getUserList();
     }
 
