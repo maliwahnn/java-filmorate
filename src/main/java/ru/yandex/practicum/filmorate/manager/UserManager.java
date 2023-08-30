@@ -34,7 +34,7 @@ public class UserManager {
         user.setId(++userId);
     }
 
-    public User updateUser(User user) {
+    public User updateUser(User user)  {
         if (allUsers.containsKey(user.getId())) {
             loginValidation(user.getLogin());
             emailValidation(user.getEmail());
@@ -43,9 +43,10 @@ public class UserManager {
             allUsers.put(user.getId(), user);
             return user;
         } else {
-            return null;
+            throw new RuntimeException("Internal Server Error (500)");
         }
     }
+
 
     public List<User> getUserList() {
         List<User> list = new ArrayList<>(allUsers.values());

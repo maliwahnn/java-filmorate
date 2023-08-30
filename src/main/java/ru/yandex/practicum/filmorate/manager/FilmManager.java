@@ -20,14 +20,18 @@ public class FilmManager {
     private int filmId;
 
     public Film addFilm(Film film) {
-        descriptionValidation(film.getDescription());
-        dateValidation(film.getReleaseDate());
-        timeValidation(film.getDuration());
-        nameValidation(film.getName());
-        createId(film);
-        allFilms.put(filmId, film);
-        log.info("Фильм создан", film.getName(), film.getId());
-        return film;
+        if (allFilms.containsKey(film.getId())) {
+            descriptionValidation(film.getDescription());
+            dateValidation(film.getReleaseDate());
+            timeValidation(film.getDuration());
+            nameValidation(film.getName());
+            createId(film);
+            allFilms.put(filmId, film);
+            log.info("Фильм создан", film.getName(), film.getId());
+            return film;
+        } else {
+            throw new RuntimeException("Internal Server Error (500)");
+        }
     }
 
     public void createId(Film film) {
