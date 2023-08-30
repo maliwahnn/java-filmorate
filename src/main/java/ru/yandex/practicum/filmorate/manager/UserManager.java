@@ -35,12 +35,16 @@ public class UserManager {
     }
 
     public User updateUser(User user) {
-        loginValidation(user.getLogin());
-        emailValidation(user.getEmail());
-        nameValidation(user.getName(), user.getLogin());
-        birthdayValidation(user);
-        allUsers.put(user.getId(), user);
-        return user;
+        if (allUsers.containsKey(user.getId())) {
+            loginValidation(user.getLogin());
+            emailValidation(user.getEmail());
+            nameValidation(user.getName(), user.getLogin());
+            birthdayValidation(user);
+            allUsers.put(user.getId(), user);
+            return user;
+        } else {
+            return null;
+        }
     }
 
     public List<User> getUserList() {
