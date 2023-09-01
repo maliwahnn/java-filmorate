@@ -29,7 +29,6 @@ public class FilmManager {
             allFilms.put(filmId, film);
             log.info("Фильм создан", film.getName(), film.getId());
             return film;
-        
     }
 
     public void createId(Film film) {
