@@ -20,7 +20,6 @@ public class FilmManager {
     private int filmId;
 
     public Film addFilm(Film film) {
-
         descriptionValidation(film.getDescription());
             dateValidation(film.getReleaseDate());
             timeValidation(film.getDuration());

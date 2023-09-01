@@ -22,7 +22,7 @@ public class UserManager {
     public User addUser(User user) {
         loginValidation(user.getLogin());
         emailValidation(user.getEmail());
-        nameValidation(user.getName(),user);
+        nameValidation(user);
         birthdayValidation(user);
         createId(user);
         allUsers.put(userId, user);
@@ -38,7 +38,7 @@ public class UserManager {
         if (allUsers.containsKey(user.getId())) {
             loginValidation(user.getLogin());
             emailValidation(user.getEmail());
-            nameValidation(user.getName(),user);
+            nameValidation(user);
             birthdayValidation(user);
             allUsers.put(user.getId(), user);
             return user;
@@ -65,8 +65,8 @@ public class UserManager {
         }
     }
 
-    private void nameValidation(String name, User user) throws ValidationException {
-        if (name == null || name.isEmpty()) {
+    private void nameValidation(User user) throws ValidationException {
+        if (user.getName() == null || user.getName().isEmpty()) {
             user.setName(user.getLogin());
             throw new ValidationException("Вместо имени будет использован логин");
         }
