@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 
+import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
 
@@ -33,13 +34,13 @@ public class UserManager {
         user.setId(++userId);
     }
 
-    public User updateUser(User user) {
+    public User updateUser(User user) throws ValidationException {
         if (allUsers.containsKey(user.getId())) {
             ValidationManager.allUserExceptions(user.getEmail(), user.getLogin(), user.getName(), user);
             allUsers.put(user.getId(), user);
             return user;
         } else {
-          return null;
+            throw new ValidationException("Пользователя с таким айди нет");
         }
     }
 

@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 
+import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 
@@ -31,13 +32,13 @@ public class FilmManager {
         film.setId(++filmId);
     }
 
-    public Film updateFilm(Film film) {
+    public Film updateFilm(Film film) throws ValidationException {
         if (allFilms.containsKey(film.getId())) {
             ValidationManager.allFilmExceptions(film.getName(), film.getDescription(), film.getReleaseDate(), film.getDuration());
             allFilms.put(film.getId(), film);
             return film;
         } else {
-           return null;
+            throw new ValidationException("Фильма с таким айди нет");
         }
     }
 
