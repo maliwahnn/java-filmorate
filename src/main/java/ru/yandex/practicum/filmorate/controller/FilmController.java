@@ -14,17 +14,17 @@ public class FilmController {
     FilmManager filmManager = new FilmManager();
 
     @GetMapping
-    public List<Film> getFilm() {
+    private List<Film> getFilm() {
         return filmManager.getFilmsList();
     }
 
     @PutMapping
-    public Film update(@RequestBody Film film) {
+    private Film update(@RequestBody Film film) {
         return filmManager.updateFilm(film);
     }
 
     @PostMapping
-    public Film add(@RequestBody Film film) {
+    private Film add(@RequestBody Film film) {
         return filmManager.addFilm(film);
     }
 
