@@ -4,8 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
 
+import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
+import java.time.LocalDate;
 import java.util.*;
 
 @Slf4j
@@ -21,7 +23,7 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public Film createFilm(Film film) {
-        ValidationManager.allFilmExceptions(film.getName(), film.getDescription(), film.getReleaseDate(), film.getDuration());
+        validate(film);
         films.put(film.getId(), film);
         log.info("фильм создан", film.getName(), film.getId());
         return film;
@@ -35,7 +37,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     @Override
     public Film updateFilm(Film film) {
         if (films.containsKey(film.getId())) {
-            ValidationManager.allFilmExceptions(film.getName(), film.getDescription(), film.getReleaseDate(), film.getDuration());
+            validate(film);
             films.put(film.getId(), film);
             log.info("фильм обновлён", film.getName(), film.getId());
             return film;
@@ -57,5 +59,26 @@ public class InMemoryFilmStorage implements FilmStorage {
         return new ArrayList<>(films.values());
     }
 
+    private void validate(Film film) {
+        if (film.getReleaseDate() == null ||
+                film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
+            throw new ValidationException("Некорректная дата");
+        }
+        if (film.getName().isEmpty() || film.getName().isBlank()) {
+            throw new ValidationException("Отсутствует название фильма");
+        }
+        if (film.getDuration() <= 0) {
+            throw new ValidationException("Длительность фильма не может быть меньше нуля");
+        }
+        if (film.getDescription().length() > 200 || film.getDescription().length() == 0) {
+            throw new ValidationException("Максимальное количество символов 200");
+        }
+        if (film.getId() == null || film.getId() <= 0) {
+            film.setId(++id);
+        }
+        if (film.getLikes() == null) {
+            film.setLikes(new HashSet<>());
+        }
+    }
 
 }
