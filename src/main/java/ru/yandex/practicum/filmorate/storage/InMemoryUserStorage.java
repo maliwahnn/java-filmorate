@@ -3,9 +3,11 @@ package ru.yandex.practicum.filmorate.storage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
+import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
 
+import java.time.LocalDate;
 import java.util.*;
 
 @Slf4j
@@ -21,7 +23,7 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public User createUser(User user) {
-        ValidationManager.allUserExceptions(user.getEmail(), user.getLogin(), user.getName(), user);
+        validate(user);
         users.put(user.getId(), user);
         log.info("Пользователь создан", user.getEmail(), user.getId());
         return user;
@@ -38,7 +40,7 @@ public class InMemoryUserStorage implements UserStorage {
     @Override
     public User updateUser(User user) {
         if (users.containsKey(user.getId())) {
-            ValidationManager.allUserExceptions(user.getEmail(), user.getLogin(), user.getName(), user);
+            validate(user);
             users.put(user.getId(), user);
             log.info("Пользователь обновлён", user.getLogin(), user.getId());
             return user;
@@ -57,5 +59,27 @@ public class InMemoryUserStorage implements UserStorage {
         return new ArrayList<>(users.values());
     }
 
-
+    private void validate(User user) {
+        if (user.getBirthday().isAfter(LocalDate.now()) || user.getBirthday() == null) {
+            throw new ValidationException("Некорректная дата рождения" + user.getId() + "'");
+        }
+        if (user.getEmail() == null || user.getEmail().isBlank() || !user.getEmail().contains("@")) {
+            throw new ValidationException("Некорректный email" + user.getId() + "'");
+        }
+        if (user.getName() == null || user.getName().isBlank()) {
+            user.setName(user.getLogin());
+            log.info("Пользователь создан", user.getId(), user.getName());
+        }
+        if (user.getLogin().isBlank() || user.getLogin().isEmpty()) {
+            throw new ValidationException("Некорректный логин" + user.getId() + "'");
+        }
+        if (user.getFriends() == null) {
+            user.setFriends(new HashSet<>());
+        }
+        if (user.getId() == null || user.getId() <= 0) {
+            user.setId(++id);
+        }
     }
+
+
+}

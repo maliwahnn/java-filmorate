@@ -24,22 +24,4 @@ public class ValidationManager {
             throw new ValidationException("Неверная длительность фильма");
         }
     }
-
-    public static void allUserExceptions(String email, String login, String name, User user) throws ValidationException {
-        if (email == null || email.isBlank() || !email.contains("@")) {
-            throw new ValidationException("Email не должен быть пустым и должен содержать @");
-        }
-
-        if (login.isBlank() || login.isEmpty()) {
-            throw new ValidationException("Логин не может быть пустым и содержать пробелы");
-        }
-
-        if (name == null || name.isEmpty()) {
-            throw new ValidationException("Вместо имени будет использован логин");
-        }
-
-        if (user.getBirthday().isAfter(LocalDate.now()) || user.getBirthday() == null) {
-            throw new ValidationException("Некорректная дата рождения" + user.getId() + "'");
-        }
-    }
 }
