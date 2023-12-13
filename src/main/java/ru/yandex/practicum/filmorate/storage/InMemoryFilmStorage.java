@@ -42,7 +42,7 @@ public class InMemoryFilmStorage implements FilmStorage {
             log.info("фильм обновлён", film.getName(), film.getId());
             return film;
         } else {
-            throw new ObjectNotFoundException("Такого фильма не существует");
+            throw new ObjectNotFoundException("Обновление фильма невозможно, так как он еще не был создан");
         }
     }
 

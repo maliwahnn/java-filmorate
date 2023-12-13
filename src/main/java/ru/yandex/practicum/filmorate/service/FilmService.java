@@ -15,11 +15,14 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class FilmService extends InMemoryFilmStorage {
-    //Этот класс представляет сервис для работы с данными фильмов.
+    /*Этот класс представляет сервис для работы с данными фильмов. В нем используется аннотация @Slf4j, которая добавляет логгирование с использованием библиотеки SLF4J.
+    Также класс помечен аннотацией @Service, что указывает, что он является компонентом сервиса.
+    */
 
     private final UserService userService;
 
-    // Метод для добавления лайка к фильму от пользователя
+    /* метод для добавления лайка к фильму от пользователя. Он принимает идентификаторы фильма (`filmId`) и пользователя (`userId`),
+    проверяет существование фильма и пользователя, а затем вызывает метод `addLike` у объекта фильма для добавления лайка. */
     public void addLike(Long filmId, Long userId) {
         Film film = getFilmById(filmId);
         userService.getUserById(userId);
@@ -30,7 +33,9 @@ public class FilmService extends InMemoryFilmStorage {
         log.info("поставлен лайк", userId, filmId);
     }
 
-    // Метод для удаления лайка от пользователя к фильму
+    /* метод для удаления лайка от пользователя к фильму. Аналогичен методу `addLike`,
+    но вызывает метод `removeLike` у объекта фильма для удаления лайка.
+    */
     public void deleteLike(Long filmId, Long userId) {
         Film film = getFilmById(filmId);
         userService.getUserById(userId);
@@ -41,7 +46,9 @@ public class FilmService extends InMemoryFilmStorage {
         log.info("лайк удалён", userId, filmId);
     }
 
-    // Метод для получения списка популярных фильмов
+    /* метод для получения списка популярных фильмов. Он сортирует список фильмов по количеству лайков в обратном порядке
+    и возвращает заданное количество самых популярных фильмов.
+    */
     public List<Film> getPopularFilms(int count) {
         return getFilms().stream()
                 .sorted(Comparator.comparingInt(Film::getLikesQuantity).reversed())
