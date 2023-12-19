@@ -9,7 +9,10 @@ import java.util.Set;
 
 @Data
 @AllArgsConstructor
-public class User { // Класс аналогичен классу Film только с информацией о пользователе
+public class User {
+    /**
+     * Класс аналогичен классу Film только с информацией о пользователе
+     */
     @PositiveOrZero
     private Long id;
     @Email
