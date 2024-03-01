@@ -1,84 +1,39 @@
 package ru.yandex.practicum.filmorate.service;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
+import ru.yandex.practicum.filmorate.exception.ValidateException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.storage.StorageUser;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.time.LocalDate;
+import java.util.Objects;
 
-@Slf4j
-@Service
-@RequiredArgsConstructor
-public class UserService extends InMemoryUserStorage {
-    /**
-     * Класс UserService представляет сервис для работы с данными о пользователях.
-     * Он наследуется от класса InMemoryUserStorage, что предполагает наличие методов для получения, добавления и удаления пользователей.
-     */
+@Service("UserService")
+public class UserService extends ServiceUser {
+    protected static final String USER_STORAGE = "userDBStorage";
+    protected static final String USER_LOGIN_EXCEPTION = "Логин пользователя не может содержать пробелы";
+    protected static final String USER_BIRTH_DATE_EXCEPTION = "Дата рождения не может быть в будущем";
 
-    public void addFriend(Long userId, Long friendId) {
-        User user = getUserById(userId);
-        User friend = getUserById(friendId);
-        user.addFriend(friendId);
-        friend.addFriend(userId);
+    public UserService(@Qualifier(USER_STORAGE) StorageUser storage) {
+        super(storage);
     }
 
-    /**
-     * добавляет друга пользователю.
-     * Он принимает идентификаторы пользователя и друга, получает объекты пользователей по их идентификаторам и добавляет друга в список друзей пользователя, а также пользователя в список друзей друга.
-     */
+    @Override
+    protected void validate(User user) throws ValidateException {
 
-    public void deleteFriend(Long userId, Long friendId) {
-        User user = getUserById(userId);
-        User friend = getUserById(friendId);
-        user.removeFriend(friendId);
-        friend.removeFriend(userId);
-    }
 
-    /**
-     * удаляет друга у пользователя.
-     * Он также принимает идентификаторы пользователя и друга, получает объекты пользователей и удаляет друга из списка друзей пользователя и пользователя из списка друзей друга.
-     */
-    public List<User> getFriends(Long userId) {
-        User user = getUserById(userId);
-        Set<Long> friends = user.getFriends();
-        if (friends.isEmpty()) {
-            throw new ObjectNotFoundException("Список друзей пользователя " + userId + " пуст");
-        }
-        return friends.stream()
-                .map(this::getUserById)
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * возвращает список друзей пользователя.
-     * Он принимает идентификатор пользователя, получает объект пользователя по его идентификатору и возвращает список объектов друзей пользователя.
-     */
-    public List<User> getCommonFriends(Long userId, Long friendId) {
-        User user = getUserById(userId);
-        User friend = getUserById(friendId);
-        Set<Long> userFriends = user.getFriends();
-        Set<Long> friendFriends = friend.getFriends();
-        Set<Long> commonFriends = new HashSet<>();
-
-        for (Long friendUserId : userFriends) {
-            if (friendFriends.contains(friendUserId)) {
-                commonFriends.add(friendUserId);
-            }
+        if (user.getLogin().contains(" ")) {
+            throw new ValidateException(USER_LOGIN_EXCEPTION);
         }
 
-        List<User> commonFriendUsers = new ArrayList<>();
-        for (Long commonFriendId : commonFriends) {
-            commonFriendUsers.add(getUserById(commonFriendId));
+        if (Objects.isNull(user.getName()) || user.getName().isEmpty() || user.getName().isBlank()) {
+            user.setName(user.getLogin());
         }
 
-        return commonFriendUsers;
+        if (user.getBirthday().isAfter(LocalDate.now())) {
+            throw new ValidateException(USER_BIRTH_DATE_EXCEPTION);
+        }
+
     }
-    /** возвращает список общих друзей между двумя пользователями.
-     Он принимает идентификаторы пользователя и друга, получает объекты пользователей, получает списки идентификаторов друзей каждого пользователя и находит общих друзей.
-     Затем метод возвращает список объектов общих друзей.
-     */
 }
