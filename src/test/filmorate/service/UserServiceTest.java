@@ -28,11 +28,11 @@ class UserServiceTest {
                 .birthday(LocalDate.of(1994, 6, 12))
                 .build();
 
-        assertThrows(ValidateException.class, () -> userService.addModel(user));
+        Assertions.assertThrows(ValidateException.class, () -> userService.addModel(user));
         user.setLogin("vasyaPupkin");
         userService.addModel(user);
-        assertEquals(user.getLogin(), user.getName());
+        Assertions.assertEquals(user.getLogin(), user.getName());
         user.setBirthday(LocalDate.of(2024, 2, 23));
-        assertThrows(ValidateException.class, () -> userService.addModel(user));
+        Assertions.assertThrows(ValidateException.class, () -> userService.addModel(user));
     }
 }
