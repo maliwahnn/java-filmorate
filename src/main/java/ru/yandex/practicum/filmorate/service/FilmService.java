@@ -1,63 +1,54 @@
 package ru.yandex.practicum.filmorate.service;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
+import ru.yandex.practicum.filmorate.exception.ValidateException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
+import ru.yandex.practicum.filmorate.storage.StorageFilm;
 
-import java.util.Comparator;
-import java.util.stream.Collectors;
-import java.util.List;
+import java.time.LocalDate;
+import java.util.Objects;
+import java.util.TreeSet;
 
-@Slf4j
 @Service
-@RequiredArgsConstructor
-public class FilmService extends InMemoryFilmStorage {
-    /**
-     * Этот класс представляет сервис для работы с данными фильмов. В нем используется аннотация @Slf4j, которая добавляет логгирование с использованием библиотеки SLF4J.
-     * Также класс помечен аннотацией @Service, что указывает, что он является компонентом сервиса.
-     */
+public class FilmService extends ServiceFilm {
 
-    private final UserService userService;
+    //    protected static final String FILM_STORAGE = "inMemoryFilmStorage";
+    protected static final String FILM_STORAGE = "FilmDBStorage";
+    protected static final String FILM_NAME_BLANK_EXCEPTION = "Не заполнено название фильма";
+    protected static final String FILM_DESCRIPTION_EXCEPTION = "Длинна описания привышает 200 символов";
+    protected static final String FILM_DATE_PRODUCE_EXCEPTION = "Дата выпуска не может быть раньше появления самого кино";
+    protected static final String FILM_DURATION_EXCEPTION = "Продолжительность не может быть меньше или ровна 0";
 
-    /**
-     * метод для добавления лайка к фильму от пользователя. Он принимает идентификаторы фильма (`filmId`) и пользователя (`userId`),
-     * проверяет существование фильма и пользователя, а затем вызывает метод `addLike` у объекта фильма для добавления лайка.
-     */
-    public void addLike(Long filmId, Long userId) {
-        Film film = getFilmById(filmId);
-        userService.getUserById(userId);
-        if (film == null) {
-            throw new ObjectNotFoundException("Фильма с таким id не существует" + filmId);
+
+    public FilmService(@Qualifier(FILM_STORAGE) StorageFilm storage) {
+        super(storage);
+    }
+
+    protected void validate(Film film) throws ValidateException {
+        if (Objects.isNull(film.getGenres())) {
+            film.setGenres(new TreeSet<>());
         }
-        film.addLike(userId);
-        log.info("поставлен лайк", userId, filmId);
-    }
 
-    /**
-     * метод для удаления лайка от пользователя к фильму. Аналогичен методу `addLike`,
-     * но вызывает метод `removeLike` у объекта фильма для удаления лайка.
-     */
-    public void deleteLike(Long filmId, Long userId) {
-        Film film = getFilmById(filmId);
-        userService.getUserById(userId);
-        if (film == null) {
-            throw new ObjectNotFoundException("Фильма с таким id не существует" + filmId);
+        if (Objects.isNull(film.getLikes())) {
+            film.setLikes(new TreeSet<>());
         }
-        film.removeLike(userId);
-        log.info("лайк удалён", userId, filmId);
+
+        if (Objects.isNull(film.getName()) || film.getName().isBlank() || film.getName().isEmpty()) {
+            throw new ValidateException(FILM_NAME_BLANK_EXCEPTION);
+        }
+
+        if (film.getDescription().length() > 200) {
+            throw new ValidateException(FILM_DESCRIPTION_EXCEPTION);
+        }
+        final String dateStartFilmEpoch = "1895-12-28";
+        if (film.getReleaseDate().isBefore(LocalDate.parse(dateStartFilmEpoch))) {
+            throw new ValidateException(FILM_DATE_PRODUCE_EXCEPTION);
+        }
+
+        if (film.getDuration() <= 0) {
+            throw new ValidateException(FILM_DURATION_EXCEPTION);
+        }
     }
 
-    /**
-     * метод для получения списка популярных фильмов. Он сортирует список фильмов по количеству лайков в обратном порядке
-     * и возвращает заданное количество самых популярных фильмов.
-     */
-    public List<Film> getPopularFilms(int count) {
-        return getFilms().stream()
-                .sorted(Comparator.comparingInt(Film::getLikesQuantity).reversed())
-                .limit(count).collect(Collectors.toList());
-    }
 }
-

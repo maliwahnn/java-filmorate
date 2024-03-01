@@ -1,85 +1,70 @@
 package ru.yandex.practicum.filmorate.storage;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
+import ru.yandex.practicum.filmorate.model.FromTo;
+import ru.yandex.practicum.filmorate.model.Model;
 import ru.yandex.practicum.filmorate.model.User;
 
+import java.util.List;
+import java.util.Map;
 
-import java.time.LocalDate;
-import java.util.*;
+@Component("inMemoryUserStorage")
+@RequiredArgsConstructor
+public class InMemoryUserStorage implements StorageUser {
+    private final Map<Integer, User> userMap;
+    private Integer id = 0;
 
-@Slf4j
-@Component
-public class InMemoryUserStorage implements UserStorage {
-    private final Map<Long, User> users;
-    private Long id;
+    public boolean isExist(int id) {
+        return userMap.containsKey(id);
+    }
 
-    public InMemoryUserStorage() {
-        users = new HashMap<>();
-        id = 0L;
+    public void update(Model model) {
+        userMap.put(model.getId(), (User) model);
+    }
+
+    public Model save(Model model) {
+        id++;
+        model.setId(id);
+        userMap.put(id, (User) model);
+
+        return model;
+    }
+
+    public User get(int id) {
+        return userMap.get(id);
+    }
+
+    public void delete(int id) {
+        userMap.remove(id);
     }
 
     @Override
-    public User createUser(User user) {
-        validate(user);
-        users.put(user.getId(), user);
-        log.info("Пользователь создан", user.getEmail(), user.getId());
-        return user;
+    public Map<Integer, User> getModelMap() {
+        return userMap;
     }
 
-    @Override
-    public User getUserById(Long id) {
-        if (!users.containsKey(id)) {
-            throw new ObjectNotFoundException("Пользователя с таким id не существует " + id + "'");
-        }
-        return users.get(id);
+    public void removeIdFromIdSet(FromTo user) {
+        User user1 = userMap.get(user.getFrom());
+        User user2 = userMap.get(user.getTo());
+        List<Integer> userFr1 = user1.getFriends();
+        List<Integer> userFr2 = user2.getFriends();
+
+        userFr1.remove(user2.getId());
+        userFr2.remove(user1.getId());
+
     }
 
-    @Override
-    public User updateUser(User user) {
-        if (users.containsKey(user.getId())) {
-            validate(user);
-            users.put(user.getId(), user);
-            log.info("Пользователь обновлён", user.getLogin(), user.getId());
-            return user;
-        } else {
-            throw new ObjectNotFoundException("Пользователя не существует");
-        }
-    }
+    public User addToSet(FromTo user) {
+        User user1 = userMap.get(user.getFrom());
+        User user2 = userMap.get(user.getTo());
+        List<Integer> userFr1 = user1.getFriends();
+        List<Integer> userFr2 = user2.getFriends();
 
-    @Override
-    public void deleteUsers() {
-        users.clear();
-    }
+        userFr1.add(user2.getId());
+        userFr2.add(user1.getId());
 
-    @Override
-    public List<User> getUsers() {
-        return new ArrayList<>(users.values());
+        return user1;
     }
-
-    private void validate(User user) {
-        if (user.getBirthday().isAfter(LocalDate.now()) || user.getBirthday() == null) {
-            throw new ValidationException("Некорректная дата рождения" + user.getId() + "'");
-        }
-        if (user.getEmail() == null || user.getEmail().isBlank() || !user.getEmail().contains("@")) {
-            throw new ValidationException("Некорректный email" + user.getId() + "'");
-        }
-        if (user.getName() == null || user.getName().isBlank()) {
-            user.setName(user.getLogin());
-            log.info("Пользователь создан", user.getId(), user.getName());
-        }
-        if (user.getLogin().isBlank() || user.getLogin().isEmpty()) {
-            throw new ValidationException("Некорректный логин" + user.getId() + "'");
-        }
-        if (user.getFriends() == null) {
-            user.setFriends(new HashSet<>());
-        }
-        if (user.getId() == null || user.getId() <= 0) {
-            user.setId(++id);
-        }
-    }
-
 
 }

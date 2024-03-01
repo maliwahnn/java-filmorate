@@ -1,38 +1,32 @@
 package ru.yandex.practicum.filmorate.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 
-import jakarta.validation.constraints.*;
-import lombok.*;
-
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.Set;
+import java.util.List;
 
 @Data
+@Builder
 @AllArgsConstructor
-public class User {
-    /**
-     * Класс аналогичен классу Film только с информацией о пользователе
-     */
-    @PositiveOrZero
-    private Long id;
+public class User extends Model {
+    private int id;
+    private String name;
     @Email
+    @NotBlank
+    @NotNull
+    @NotEmpty
     private String email;
     @NotNull
+    @NotBlank
+    @NotEmpty
     private String login;
-    private String name;
-    @PastOrPresent
     private LocalDate birthday;
-    private Set<Long> friends;
+    private List<Integer> friends;
 
-    public void addFriend(Long id) {
-        friends.add(id);
-    }
-
-    public void removeFriend(Long id) {
-        friends.remove(id);
-    }
-
-    public int getFriendsQuantity() {
-        return friends.size();
-    }
 }
