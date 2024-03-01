@@ -34,10 +34,10 @@ class UserDBStorageTest {
         userStorage.save(user1);
         Optional<User> userOptional = Optional.of(userStorage.get(1));
 
-        Assertions.assertThat(userOptional)
+        assertThat(userOptional)
                 .isPresent()
                 .hasValueSatisfying(user ->
-                        Assertions.assertThat(user).hasFieldOrPropertyWithValue("id", 1)
+                        assertThat(user).hasFieldOrPropertyWithValue("id", 1)
                 );
 
         user1.setId(1);
@@ -45,10 +45,10 @@ class UserDBStorageTest {
         userStorage.update(user1);
 
         User userUp = userStorage.get(1);
-        Assertions.assertEquals("Update", userUp.getName());
+        assertEquals("Update", userUp.getName());
 
         userStorage.delete(1);
-        Assertions.assertThrows(EmptyResultDataAccessException.class, () -> userStorage.get(1));
+        assertThrows(EmptyResultDataAccessException.class, () -> userStorage.get(1));
 
     }
 

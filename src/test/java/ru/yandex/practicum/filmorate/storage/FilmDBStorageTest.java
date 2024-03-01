@@ -44,13 +44,13 @@ class FilmDBStorageTest {
 
         Film filmGet = storageFilm.get(1);
 
-        Assertions.assertEquals(1, filmGet.getId());
-        Assertions.assertEquals(2, storageFilm.get(2).getId());
+        assertEquals(1, filmGet.getId());
+        assertEquals(2, storageFilm.get(2).getId());
         storageFilm.delete(1);
-        Assertions.assertThrows(EmptyResultDataAccessException.class, () -> storageFilm.get(1));
-        Assertions.assertTrue(storageFilm.get(2).getLikes().stream().anyMatch(e -> Objects.equals(e, 1)));
+        assertThrows(EmptyResultDataAccessException.class, () -> storageFilm.get(1));
+        assertTrue(storageFilm.get(2).getLikes().stream().anyMatch(e -> Objects.equals(e, 1)));
         storageFilm.removeIdFromIdSet(new FilmLikes(2, 1));
-        Assertions.assertEquals(0, storageFilm.get(2).getLikes().size());
+        assertEquals(0, storageFilm.get(2).getLikes().size());
 
     }
 
@@ -66,20 +66,20 @@ class FilmDBStorageTest {
 
         Film updateGet = storageFilm.get(1);
 
-        Assertions.assertEquals(updateGet.getName(), "nameUpdate");
+        assertEquals(updateGet.getName(), "nameUpdate");
 
         Collections.addAll(genreTreeSet, new Genre(2, null));
 
         storageFilm.update(updateWithName);
-        Assertions.assertTrue(storageFilm.get(1).getGenres().stream().anyMatch(e -> Objects.equals(e.getId(), 2)));
+        assertTrue(storageFilm.get(1).getGenres().stream().anyMatch(e -> Objects.equals(e.getId(), 2)));
     }
 
     @Test
     void getMpaGenres() {
-        Assertions.assertEquals(1, storageFilm.getMpa(1).getId());
-        Assertions.assertEquals(5, storageFilm.getMpaList().size());
-        Assertions.assertEquals(1, storageFilm.getGenreById(1).getId());
-        Assertions.assertEquals(6, storageFilm.getGenreList().size());
+        assertEquals(1, storageFilm.getMpa(1).getId());
+        assertEquals(5, storageFilm.getMpaList().size());
+        assertEquals(1, storageFilm.getGenreById(1).getId());
+        assertEquals(6, storageFilm.getGenreList().size());
 
     }
 }

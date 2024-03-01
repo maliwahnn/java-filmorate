@@ -26,17 +26,17 @@ class FilmServiceTest {
                 .releaseDate(LocalDate.of(2022, 02, 23))
                 .build();
 
-        Assertions.assertThrows(ValidateException.class, () -> filmService.addModel(film));
+        assertThrows(ValidateException.class, () -> filmService.addModel(film));
         film.setName(" ");
-        Assertions.assertThrows(ValidateException.class, () -> filmService.addModel(film));
+        assertThrows(ValidateException.class, () -> filmService.addModel(film));
         film.setDescription(" wqeqwrwefsdgsdevygfghdfgsdrthdfhdfgsgsdgdsgdgfdfgdfggggggfdffhljhjlhkjlhiuhiulhjlknjhkjdsafjdfasofuawejflkasjfls;jfiasojfeiajs;fe;kasjdfksjfdiosjfisjfsidhgdfgskdjfksdjfjsif fjs kfj sdkfjas;lfd ;sjfkas");
         film.setName("film1");
-        Assertions.assertThrows(ValidateException.class, () -> filmService.addModel(film));
+        assertThrows(ValidateException.class, () -> filmService.addModel(film));
         film.setDescription("description");
         film.setReleaseDate(LocalDate.of(1895, 12, 25));
-        Assertions.assertThrows(ValidateException.class, () -> filmService.addModel(film));
+        assertThrows(ValidateException.class, () -> filmService.addModel(film));
         film.setReleaseDate(LocalDate.of(2022, 02, 23));
         film.setDuration(-1);
-        Assertions.assertThrows(ValidateException.class, () -> filmService.addModel(film));
+        assertThrows(ValidateException.class, () -> filmService.addModel(film));
     }
 }

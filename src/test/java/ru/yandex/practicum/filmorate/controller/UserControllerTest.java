@@ -29,9 +29,9 @@ class UserControllerTest {
                 .birthday(LocalDate.of(1994, 6, 12)).build();
 
         User user1 = userController.add(user);
-        Assertions.assertEquals(1, userController.getModelList().size());
+        assertEquals(1, userController.getModelList().size());
         user1.setName("Vasya");
         userController.update(user1);
-        Assertions.assertEquals("Vasya", ((User) userController.getModelList().get(0)).getName());
+        assertEquals("Vasya", ((User) userController.getModelList().get(0)).getName());
     }
 }

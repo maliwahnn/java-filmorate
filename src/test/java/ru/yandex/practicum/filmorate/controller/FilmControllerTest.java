@@ -31,12 +31,12 @@ class FilmControllerTest {
                 .duration(60)
                 .releaseDate(LocalDate.of(2022, 02, 23)).build();
 
-        Assertions.assertThrows(ValidateException.class, () -> filmController.add(film));
+        assertThrows(ValidateException.class, () -> filmController.add(film));
         film.setName("film1");
         Film film1 = filmController.add(film);
-        Assertions.assertEquals(1, filmController.getModelList().size());
+        assertEquals(1, filmController.getModelList().size());
         film1.setName("FilmVasya");
         filmController.update(film1);
-        Assertions.assertEquals("FilmVasya", ((Film) filmController.getModelList().get(0)).getName());
+        assertEquals("FilmVasya", ((Film) filmController.getModelList().get(0)).getName());
     }
 }
